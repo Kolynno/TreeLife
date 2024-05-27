@@ -10,16 +10,22 @@ import java.util.ArrayList;
 
 public class GameBoard extends JFrame {
 
+
+
     // The world settings
     // Standard:
     private final int ROWS = 32;
     private final int COLS = 32;
     private final int CELL_SIZE = 28;
 
+    //Vars
+    private static final int ENERGY_PER_CELL = 10;
+
     // The world design
     private final Color BORDER_COLOR = new Color(215, 215, 215);
     private final Color DEFAULT_COLOR = new Color(241, 241, 241);
     private final Color LIFE_COLOR = new Color(149, 252, 84);
+    private final Color SEED_COLOR = new Color(255, 255, 255);
 
     //UI
     private JButton nextStepButton;
@@ -96,17 +102,28 @@ public class GameBoard extends JFrame {
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
                     if (cells[i][j].getBackground() == LIFE_COLOR) {
-                        cells[i][j].getTree().setEnergy(cells[i][j].getTree().getEnergy() - 10);
+                        cells[i][j].getTree().setEnergy(cells[i][j].getTree().getEnergy() - ENERGY_PER_CELL);
                         System.out.println(cells[i][j].getTree().toString());
                         if (cells[i][j].isActive()) {
-                            calculateLife(i, j);
+                            if (cells[i][j].getTree().getEnergy() > 0) {
+                                calculateLife(i, j);
+                            } else {
+                                removeTree(cells[i][j].getTree());
+                            }
+                        } else {
+                            if (cells[i][j].getTree().getEnergy() < 0) {
+                                removeTree(cells[i][j].getTree());
+                            }
                         }
+                    } else if (cells[i][j].getBackground() == SEED_COLOR) {
+                        calculateSeed(i,j);
                     }
 
                 }
             }
         }
     }
+
 
     private class RemoveAllButton implements ActionListener {
         @Override
@@ -128,7 +145,7 @@ public class GameBoard extends JFrame {
     private void removeTree(Tree tree) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if(cells[i][j].getTree() == tree ) {
+                if(cells[i][j].getTree() == tree && cells[i][j].getBackground().equals(LIFE_COLOR) ) {
                     cells[i][j].setBackground(DEFAULT_COLOR);
                     cells[i][j].removeAll();
                     cells[i][j].revalidate();
@@ -138,6 +155,17 @@ public class GameBoard extends JFrame {
         }
     }
 
+    private void calculateSeed(int i, int j) {
+        if (cells[i][j].getTree().getEnergy() < 0) {
+            if (isLifeless(i+1, j)) {
+                cells[i+1][j].setCurrentGenome(cells[i][j].getCurrentGenome());
+                cells[i+1][j].setBackground(SEED_COLOR);
+                cells[i+1][j].setTree(cells[i][j].getTree());
+                cells[i][j].setBackground(DEFAULT_COLOR);
+                cells[i][j].removeAll();
+            }
+        }
+    }
 
     private void calculateLife(int i, int j) {
         if (cells[i][j].getTree().getEnergy() < 0) {
@@ -162,24 +190,40 @@ public class GameBoard extends JFrame {
     //check game border
     private void doGenome(int i, int j, int currentGenome, int genome, Tree tree) {
         switch (currentGenome) {
-            case 0,1,2,3,4:
+            case 0,1:
                 if (isLifeless(i - 1, j)) {
                     setLife(i - 1, j, genome, tree);
                 }
                 break;
-            case 5: if (isLifeless(i, j + 1)) {
+            case 2, 3: setSeed(i,j, 0, new Tree());
+                break;
+            case 4:
+                if (isLifeless(i+1, j)) {
+                    setLife(i+1, j, genome, tree);
+                }
+                break;
+            case 5:
+                if (isLifeless(i, j + 1)) {
                 setLife(i, j + 1, genome, tree);
             }
-            case 6: if (isLifeless(i, j - 1)) {
+            case 6:
+                if (isLifeless(i, j - 1)) {
                 setLife(i, j - 1, genome, tree);
             }
             break;
-            case 7: if (isLifeless(i - 1, j) && isLifeless(i - 2, j)) {
+            case 7:
+                if (isLifeless(i - 1, j) && isLifeless(i - 2, j)) {
                     setLife(i - 1, j, genome, tree);
                     setLife(i - 2, j, genome, tree);
                     break;
                 }
         }
+    }
+
+    private void setSeed(int i, int j, int currentGenome, Tree tree) {
+        cells[i][j].setBackground(SEED_COLOR);
+        cells[i][j].setCurrentGenome(currentGenome);
+        cells[i][j].setTree(tree);
     }
 
     private void setLife(int i, int j, int genome, Tree tree) {
