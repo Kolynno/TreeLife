@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class GameBoard extends JFrame {
 
-
-
     // The world settings
     // Standard:
     private final int ROWS = 32;

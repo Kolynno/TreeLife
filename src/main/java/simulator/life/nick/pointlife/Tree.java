@@ -1,10 +1,20 @@
 package simulator.life.nick.pointlife;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Tree {
+    //Tree init settings
     private int stepsLeft = 90;
     private int energy = 300;
+
+    //Base
     private final int id;
     private final Genome genome;
+
+    //Extra
     private Tree treeParent;
 
     private static int count = 0;
@@ -14,52 +24,11 @@ public class Tree {
         this.id = count;
         this.genome = new Genome();
     }
-
     public Tree(Tree treeParent) {
         count++;
         this.id = count;
         Genome newGenome = Genome.modify(treeParent.getGenome());
         this.genome = newGenome;
-    }
-
-    public int getStepsLeft() {
-        return stepsLeft;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public static int getCount() {
-        return count;
-    }
-
-    public Genome getGenome() {
-        return genome;
-    }
-
-    public void setStepsLeft(int stepsLeft) {
-        this.stepsLeft = stepsLeft;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public static void setCount(int count) {
-        Tree.count = count;
-    }
-
-    public Tree getTreeParent() {
-        return treeParent;
-    }
-
-    public void setTreeParent(Tree treeParent) {
-        this.treeParent = treeParent;
     }
 
     @Override
