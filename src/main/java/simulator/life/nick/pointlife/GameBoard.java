@@ -84,7 +84,7 @@ public class GameBoard extends JFrame {
         public void mouseClicked(MouseEvent e) {
             Cell cell = (Cell) e.getSource();
             if (cell.getBackground().equals(DEFAULT_COLOR)) {
-                cell.setBackground(LIFE_COLOR);
+                cell.setBackground(SEED_COLOR);
                 Tree tree = new Tree();
                 cell.setTree(tree);
                 cell.setCurrentGenome(0);
@@ -103,7 +103,6 @@ public class GameBoard extends JFrame {
                 for (int j = 0; j < COLS; j++) {
                     if (cells[i][j].getBackground() == LIFE_COLOR) {
                         cells[i][j].getTree().setEnergy(cells[i][j].getTree().getEnergy() - ENERGY_PER_CELL);
-                        System.out.println(cells[i][j].getTree().toString());
                         if (cells[i][j].isActive()) {
                             if (cells[i][j].getTree().getEnergy() > 0) {
                                 calculateLife(i, j);
@@ -130,8 +129,9 @@ public class GameBoard extends JFrame {
         public void actionPerformed(ActionEvent e) {
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
-                    if(cells[i][j].getBackground() == LIFE_COLOR) {
+                    if(cells[i][j].getBackground() != DEFAULT_COLOR) {
                         cells[i][j].setBackground(DEFAULT_COLOR);
+                        cells[i][j].setActive(true);
                         cells[i][j].removeAll();
                         cells[i][j].revalidate();
                         cells[i][j].repaint();
@@ -145,8 +145,9 @@ public class GameBoard extends JFrame {
     private void removeTree(Tree tree) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if(cells[i][j].getTree() == tree && cells[i][j].getBackground().equals(LIFE_COLOR) ) {
+                if(cells[i][j].getTree() == tree && !cells[i][j].getBackground().equals(DEFAULT_COLOR) ) {
                     cells[i][j].setBackground(DEFAULT_COLOR);
+                    cells[i][j].setActive(true);
                     cells[i][j].removeAll();
                     cells[i][j].revalidate();
                     cells[i][j].repaint();
@@ -156,15 +157,29 @@ public class GameBoard extends JFrame {
     }
 
     private void calculateSeed(int i, int j) {
-        if (cells[i][j].getTree().getEnergy() < 0) {
+        if (cells[i][j].getTree().getEnergy() > 0) {
             if (isLifeless(i+1, j)) {
                 cells[i+1][j].setCurrentGenome(cells[i][j].getCurrentGenome());
                 cells[i+1][j].setBackground(SEED_COLOR);
                 cells[i+1][j].setTree(cells[i][j].getTree());
                 cells[i][j].setBackground(DEFAULT_COLOR);
                 cells[i][j].removeAll();
+            } else if (isBottom(i)) {
+                cells[i][j].setBackground(LIFE_COLOR);
+                Tree tree = new Tree();
+                cells[i][j].setTree(tree);
+                cells[i][j].setActive(true);
+                //trees.add(tree);
+                System.out.println("New seed:" + tree);
+                System.out.println(cells[i][j].getCurrentGenome());
             }
+        } else {
+            removeTree(cells[i][j].getTree());
         }
+    }
+
+    private boolean isBottom(int i) {
+        return i == ROWS - 1;
     }
 
     private void calculateLife(int i, int j) {
@@ -197,15 +212,11 @@ public class GameBoard extends JFrame {
                 break;
             case 2, 3: setSeed(i,j, 0, new Tree());
                 break;
-            case 4:
-                if (isLifeless(i+1, j)) {
-                    setLife(i+1, j, genome, tree);
+            case 4,5:
+                if (isLifeless(i, j + 1)) {
+                    setLife(i, j + 1, genome, tree);
                 }
                 break;
-            case 5:
-                if (isLifeless(i, j + 1)) {
-                setLife(i, j + 1, genome, tree);
-            }
             case 6:
                 if (isLifeless(i, j - 1)) {
                 setLife(i, j - 1, genome, tree);
@@ -234,7 +245,7 @@ public class GameBoard extends JFrame {
 
     private boolean isLifeless(int i, int j) {
         try {
-            return !cells[i][j].getBackground().equals(LIFE_COLOR);
+            return cells[i][j].getBackground().equals(DEFAULT_COLOR);
         }catch (IndexOutOfBoundsException e) {
             return false;
         }

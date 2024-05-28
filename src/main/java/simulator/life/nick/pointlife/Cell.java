@@ -35,4 +35,5 @@ public class Cell extends JPanel {
     public void setActive(boolean active) {
         isActive = active;
     }
+
 }
