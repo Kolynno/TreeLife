@@ -24,6 +24,7 @@ public class Tree {
         this.id = count;
         this.genome = new Genome();
     }
+
     public Tree(Tree treeParent) {
         count++;
         this.id = count;
@@ -33,6 +34,6 @@ public class Tree {
 
     @Override
     public String toString() {
-        return "Tree:" + " id=" + id + ", stepsLeft=" + stepsLeft + ", energy=" + energy +  ", genome=" + genome;
+        return "Tree " + id + ", life=" + stepsLeft + ", energy=" + energy +  ", genome=" + genome;
     }
 }
