@@ -84,7 +84,7 @@ public class GameBoard extends JFrame {
         public void mouseClicked(MouseEvent e) {
             Cell cell = (Cell) e.getSource();
             if (cell.getBackground().equals(DEFAULT_COLOR)) {
-                cell.setBackground(SEED_COLOR);
+                cell.setBackground(LIFE_COLOR);
                 Tree tree = new Tree();
                 cell.setTree(tree);
                 cell.setCurrentGenome(0);
@@ -141,7 +141,6 @@ public class GameBoard extends JFrame {
         }
     }
 
-
     private void removeTree(Tree tree) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
@@ -162,16 +161,15 @@ public class GameBoard extends JFrame {
                 cells[i+1][j].setCurrentGenome(cells[i][j].getCurrentGenome());
                 cells[i+1][j].setBackground(SEED_COLOR);
                 cells[i+1][j].setTree(cells[i][j].getTree());
+                cells[i][j].setActive(true);
                 cells[i][j].setBackground(DEFAULT_COLOR);
                 cells[i][j].removeAll();
             } else if (isBottom(i)) {
                 cells[i][j].setBackground(LIFE_COLOR);
-                Tree tree = new Tree();
-                cells[i][j].setTree(tree);
                 cells[i][j].setActive(true);
+
                 //trees.add(tree);
-                System.out.println("New seed:" + tree);
-                System.out.println(cells[i][j].getCurrentGenome());
+
             }
         } else {
             removeTree(cells[i][j].getTree());
@@ -205,14 +203,14 @@ public class GameBoard extends JFrame {
     //check game border
     private void doGenome(int i, int j, int currentGenome, int genome, Tree tree) {
         switch (currentGenome) {
-            case 0,1:
+            case 0,1,4,5,6,7:
                 if (isLifeless(i - 1, j)) {
                     setLife(i - 1, j, genome, tree);
                 }
                 break;
             case 2, 3: setSeed(i,j, 0, new Tree());
                 break;
-            case 4,5:
+            /*case 4,5:
                 if (isLifeless(i, j + 1)) {
                     setLife(i, j + 1, genome, tree);
                 }
@@ -228,6 +226,8 @@ public class GameBoard extends JFrame {
                     setLife(i - 2, j, genome, tree);
                     break;
                 }
+
+             */
         }
     }
 

@@ -24,7 +24,7 @@ public class Genome {
 
     @Override
     public String toString() {
-        String genome = String.format("Genome: %s\n", Arrays.toString(dna));
+        String genome = String.format("Genome: %s", Arrays.toString(dna));
         return genome;
     }
 }

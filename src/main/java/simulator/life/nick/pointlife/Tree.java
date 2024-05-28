@@ -5,6 +5,7 @@ public class Tree {
     private int energy = 300;
     private final int id;
     private final Genome genome;
+    private Tree treeParent;
 
     private static int count = 0;
 
@@ -12,6 +13,12 @@ public class Tree {
         count++;
         this.id = count;
         this.genome = new Genome();
+    }
+
+    public Tree(Tree treeParent) {
+        count++;
+        this.id = count;
+        this.genome = treeParent.getGenome();
     }
 
     public int getStepsLeft() {
@@ -44,6 +51,14 @@ public class Tree {
 
     public static void setCount(int count) {
         Tree.count = count;
+    }
+
+    public Tree getTreeParent() {
+        return treeParent;
+    }
+
+    public void setTreeParent(Tree treeParent) {
+        this.treeParent = treeParent;
     }
 
     @Override
