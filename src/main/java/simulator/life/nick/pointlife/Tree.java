@@ -18,7 +18,8 @@ public class Tree {
     public Tree(Tree treeParent) {
         count++;
         this.id = count;
-        this.genome = treeParent.getGenome();
+        Genome newGenome = Genome.modify(treeParent.getGenome());
+        this.genome = newGenome;
     }
 
     public int getStepsLeft() {

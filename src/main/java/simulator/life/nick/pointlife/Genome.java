@@ -27,4 +27,12 @@ public class Genome {
         String genome = String.format("Genome: %s", Arrays.toString(dna));
         return genome;
     }
+
+    public static Genome modify(Genome genome) {
+        Genome newGenome = new Genome();
+        for (int i = 0; i < genome.dna.length; i++) {
+            newGenome.dna[i] = new Random().nextInt(genome.dna.length);
+        }
+        return genome;
+    }
 }

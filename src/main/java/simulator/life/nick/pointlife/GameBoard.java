@@ -203,14 +203,14 @@ public class GameBoard extends JFrame {
     //check game border
     private void doGenome(int i, int j, int currentGenome, int genome, Tree tree) {
         switch (currentGenome) {
-            case 0,1,4,5,6,7:
+            case 0,1:
                 if (isLifeless(i - 1, j)) {
                     setLife(i - 1, j, genome, tree);
                 }
                 break;
-            case 2, 3: setSeed(i,j, 0, new Tree());
+            case 2, 3, 7: setSeed(i,j, 0, cells[i][j].getTree());
                 break;
-            /*case 4,5:
+            case 4,5:
                 if (isLifeless(i, j + 1)) {
                     setLife(i, j + 1, genome, tree);
                 }
@@ -220,21 +220,13 @@ public class GameBoard extends JFrame {
                 setLife(i, j - 1, genome, tree);
             }
             break;
-            case 7:
-                if (isLifeless(i - 1, j) && isLifeless(i - 2, j)) {
-                    setLife(i - 1, j, genome, tree);
-                    setLife(i - 2, j, genome, tree);
-                    break;
-                }
-
-             */
         }
     }
 
-    private void setSeed(int i, int j, int currentGenome, Tree tree) {
+    private void setSeed(int i, int j, int currentGenome, Tree parentTree) {
         cells[i][j].setBackground(SEED_COLOR);
         cells[i][j].setCurrentGenome(currentGenome);
-        cells[i][j].setTree(tree);
+        cells[i][j].setTree(new Tree(parentTree));
     }
 
     private void setLife(int i, int j, int genome, Tree tree) {
