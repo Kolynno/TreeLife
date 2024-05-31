@@ -8,6 +8,7 @@ import java.util.Random;
 @Getter
 public class Genome {
 
+    //Settings
     private static final int GENOME_LENGTH = 8;
 
     private int[] dna;
@@ -31,11 +32,11 @@ public class Genome {
     }
 
     //TODO
-    public static Genome modify(Genome genome) {
+    public Genome mutation() {
         Genome newGenome = new Genome();
-        for (int i = 0; i < genome.dna.length; i++) {
-            newGenome.dna[i] = new Random().nextInt(genome.dna.length);
+        for (int i = 0; i < this.dna.length; i++) {
+            newGenome.dna[i] = new Random().nextInt(this.dna.length);
         }
-        return genome;
+        return newGenome;
     }
 }

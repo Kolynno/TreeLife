@@ -21,7 +21,7 @@ public class GameBoard extends JFrame {
 
     // The world design
     private final Color BORDER_COLOR = new Color(215, 215, 215);
-    private final Color DEFAULT_COLOR = new Color(241, 241, 241);
+    public static final Color DEFAULT_COLOR = new Color(241, 241, 241);
     private final Color LIFE_COLOR = new Color(149, 252, 84);
     private final Color SEED_COLOR = new Color(255, 255, 255);
 
@@ -128,11 +128,7 @@ public class GameBoard extends JFrame {
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLS; j++) {
                     if(cells[i][j].getBackground() != DEFAULT_COLOR) {
-                        cells[i][j].setBackground(DEFAULT_COLOR);
-                        cells[i][j].setActive(true);
-                        cells[i][j].removeAll();
-                        cells[i][j].revalidate();
-                        cells[i][j].repaint();
+                        cells[i][j].unlifeCell();
                     }
                 }
             }
@@ -143,11 +139,7 @@ public class GameBoard extends JFrame {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if(cells[i][j].getTree() == tree && !cells[i][j].getBackground().equals(DEFAULT_COLOR) ) {
-                    cells[i][j].setBackground(DEFAULT_COLOR);
-                    cells[i][j].setActive(true);
-                    cells[i][j].removeAll();
-                    cells[i][j].revalidate();
-                    cells[i][j].repaint();
+                    cells[i][j].unlifeCell();
                 }
             }
         }

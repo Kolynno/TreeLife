@@ -1,10 +1,10 @@
 package simulator.life.nick.pointlife;
 
-
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.swing.*;
+
+import static simulator.life.nick.pointlife.GameBoard.DEFAULT_COLOR;
 
 @Getter
 @Setter
@@ -25,6 +25,15 @@ public class Cell extends JPanel {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public void unlifeCell() {
+        this.isActive = true;
+        this.tree = null;
+        this.currentGenome = 0;
+        this.revalidate();
+        this.setBackground(DEFAULT_COLOR);
+        this.removeAll();
     }
 
 }

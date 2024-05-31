@@ -28,8 +28,7 @@ public class Tree {
     public Tree(Tree treeParent) {
         count++;
         this.id = count;
-        Genome newGenome = Genome.modify(treeParent.getGenome());
-        this.genome = newGenome;
+        this.genome = treeParent.getGenome().mutation();
     }
 
     @Override
