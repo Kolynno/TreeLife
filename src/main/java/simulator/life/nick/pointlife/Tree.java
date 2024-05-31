@@ -3,6 +3,8 @@ package simulator.life.nick.pointlife;
 import lombok.Getter;
 import lombok.Setter;
 
+import static simulator.life.nick.pointlife.GameBoard.DEFAULT_COLOR;
+
 @Getter
 @Setter
 public class Tree {
@@ -34,5 +36,15 @@ public class Tree {
     @Override
     public String toString() {
         return "Tree " + id + ", life=" + stepsLeft + ", energy=" + energy +  ", genome=" + genome;
+    }
+
+    public static void removeTree(Tree tree, int ROWS, int COLS, Cell[][] cells) {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if(cells[i][j].getTree() == tree && !cells[i][j].getBackground().equals(DEFAULT_COLOR) ) {
+                    cells[i][j].unlifeCell();
+                }
+            }
+        }
     }
 }
